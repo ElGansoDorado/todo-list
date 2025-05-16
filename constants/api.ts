@@ -58,5 +58,7 @@ export const deleteTask = async (id: number) => {
         const afterRemovalList: Task[] = taskList.filter((item) => item.id !== id);
 
         await AsyncStorage.setItem(KEY, JSON.stringify(afterRemovalList));
+
+        return afterRemovalList;
     }
 }
