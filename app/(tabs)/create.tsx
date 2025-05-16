@@ -1,26 +1,48 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
-import { View, TextInput } from 'react-native';
+import { StyleSheet, View, Button } from 'react-native';
 
 import { useState } from 'react';
-
-import { ThemedText } from '@/components/ThemedText';
 import { Colors } from '@/constants/Colors';
 
+import { CustomInput } from '@/components/ui/CustomInput';
+import { createTask } from '@/constants/api';
+
+
 export default function CreateScreen() {
-  const [text, setText] = useState('Useless Text');
+  const [title, setTitle] = useState('');
+  const [date, setDate] = useState('');
+  const [text, setText] = useState('');
 
   return (
     <View style={styles.container}>
       <SafeAreaProvider>
         <SafeAreaView>
-          <TextInput
-            style={styles.customInput}
-            onChangeText={setText}
+          <View style={styles.box}>
+            <CustomInput
+              onChangeValue={setTitle}
+              value={title}
+              label='Title'
+              placeholder='your task title'
+            />
+
+            <CustomInput
+              onChangeValue={setDate}
+              value={date}
+              label='Date'
+              placeholder='date of completion'
+            />
+
+          </View>
+
+          <CustomInput
+            onChangeValue={setText}
             value={text}
+            label='Text'
+            placeholder='your task text'
           />
+
+          <Button title="Нажми меня"  onPress={() => createTask({title, date, text})}/>
+
         </SafeAreaView>
       </SafeAreaProvider>
     </View>
@@ -29,13 +51,20 @@ export default function CreateScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+
+    flex: 1,
+
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 15,
+    paddingBottom: 15,
+    
+    backgroundColor: Colors.light.background,
   },
-  customInput: {
-    height: 40,
-    margin: 12,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: Colors.light.tint,
+  box: {
+    marginBottom: 24,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 12,
   },
 });
