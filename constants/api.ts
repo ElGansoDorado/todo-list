@@ -14,9 +14,9 @@ export const getList = async () => {
 
 export const createTask = async ({ title, date, text }: { title: string, date: string, text: string }) => {
     const list = await AsyncStorage.getItem(KEY)
-    console.log(list);
-    if (list) {
-        const taskList: Task[] = JSON.parse(list);
+
+    if (list !== null && list.length >= 0) {
+        const taskList: Task[] = JSON.parse(list as string);
 
         const newTask: Task = {
             id: taskList[taskList.length - 1].id + 1,
@@ -46,5 +46,17 @@ export const createTask = async ({ title, date, text }: { title: string, date: s
 
         const newTaskList: Task[] = [newTask];
         await AsyncStorage.setItem(KEY, JSON.stringify(newTaskList));
+    }
+}
+
+export const deleteTask = async (id: number) => {
+    const list = await AsyncStorage.getItem(KEY)
+
+    if (list) {
+        const taskList: Task[] = JSON.parse(list);
+
+        const afterRemovalList: Task[] = taskList.filter((item) => item.id !== id);
+
+        await AsyncStorage.setItem(KEY, JSON.stringify(afterRemovalList));
     }
 }

@@ -6,6 +6,7 @@ import { ScrollView, Text, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import { getList } from '@/constants/api';
 import { Task } from '@/constants/Types';
+import TaskItem from '@/components/TaskItem';
 
 export default function HomeScreen() {
   const [list, setList] = useState<Task[]>();
@@ -17,12 +18,19 @@ export default function HomeScreen() {
 
     console.log(list);
     testf();
-  },[])
+  }, [])
 
   return (
     <ScrollView>
       <View>
-        {list?.map((item) => <Text>{item.title}</Text>)}
+        {list?.map((item) => <TaskItem
+          key={item.id}
+          id={item.id}
+          title={item.title}
+          descriptionText={item.descriptionText}
+          status={item.status}
+          completionDate={item.completionDate}
+          createdDate={item.createdDate}/>)}
       </View>
     </ScrollView>
   );
