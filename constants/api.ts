@@ -12,6 +12,10 @@ export const getList = async () => {
     }
 }
 
+export const saveList = async (list: Task[]) => {
+    await AsyncStorage.setItem(KEY, JSON.stringify(list));
+}
+
 export const createTask = async ({ title, date, text, location }: { title: string, date: Date, text: string, location: string }) => {
     const list = await AsyncStorage.getItem(KEY)
 
@@ -28,7 +32,7 @@ export const createTask = async ({ title, date, text, location }: { title: strin
             completionDate: date,
             createdDate: new Date(),
 
-            status: Status.Active,
+            status: Status.Inactive,
         }
         console.log('я дополняю');
 
@@ -46,7 +50,7 @@ export const createTask = async ({ title, date, text, location }: { title: strin
             completionDate: date,
             createdDate: new Date(),
 
-            status: Status.Active,
+            status: Status.Inactive,
         }
 
         console.log('я тут');

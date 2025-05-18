@@ -1,19 +1,22 @@
 import { StyleSheet, View, Text, TouchableOpacity, Animated } from "react-native"
 import { useState, useRef } from "react";
-import { Task } from "@/constants/Types"
+import { Task, Status } from "@/constants/Types"
 import Trash from '@/assets/svg/trash-2.svg'
 import X from '@/assets/svg/x-circle.svg'
 import Loader from '@/assets/svg/loader.svg'
 import Check from '@/assets/svg/check.svg'
+import Calendar from '@/assets/svg/calendar.svg'
+import Map from '@/assets/svg/map-pin.svg'
 
 type Props = {
     task: Task,
     remove: Function,
+    switchStatus: Function,
 }
 
-export default function TaskItem({ task, remove }: Props) {
+export default function TaskItem({ task, remove, switchStatus }: Props) {
     const [isOpen, setIsOpen] = useState(false);
-    const slideAnim = useRef(new Animated.Value(0)).current; // для смещения кнопки
+    const slideAnim = useRef(new Animated.Value(0)).current; // для смещения карточки
     const panelAnim = useRef(new Animated.Value(0)).current; // для открытия панели
 
     const togglePanel = () => {
@@ -36,12 +39,12 @@ export default function TaskItem({ task, remove }: Props) {
             setIsOpen(true);
             Animated.parallel([
                 Animated.timing(slideAnim, {
-                    toValue: -55, // смещение влево на 20 пикселей
+                    toValue: -55, // смещение влево 
                     duration: 300,
                     useNativeDriver: true,
                 }),
                 Animated.timing(panelAnim, {
-                    toValue: 20, // панель полностью открыта
+                    toValue: 20, // смещение вправо
                     duration: 300,
                     useNativeDriver: true,
                 }),
@@ -49,6 +52,7 @@ export default function TaskItem({ task, remove }: Props) {
         }
     };
 
+    // выбираем один из вариантов цветов по id(для сохранения цвета при новой загрузки)
     const colorSelection = (): string => {
         const v: number = task.id % 4;
 
@@ -67,33 +71,40 @@ export default function TaskItem({ task, remove }: Props) {
     }
 
     return <View>
-        <Animated.View style={{translateX: panelAnim}}>
-            <View style={[styles.panel, {outlineColor: colorSelection()}]}>
-                <TouchableOpacity >
-                    <Text style={{color: colorSelection()}}><Loader/></Text>
+        <Animated.View style={{ translateX: panelAnim }}>
+            <View style={[styles.panel, { outlineColor: colorSelection() }]}>
+                <TouchableOpacity onPress={() => switchStatus(task.id, Status.Active)}>
+                    <Text style={{ color: colorSelection() }}><Loader /></Text>
                 </TouchableOpacity>
-                <TouchableOpacity >
-                    <Text style={{color: colorSelection()}}><Check /></Text>
+                <TouchableOpacity onPress={() => switchStatus(task.id, Status.Completed)}>
+                    <Text style={{ color: colorSelection() }}><Check /></Text>
                 </TouchableOpacity>
-                <TouchableOpacity >
-                    <Text style={{color: colorSelection()}}><X/></Text>
+                <TouchableOpacity onPress={() => switchStatus(task.id, Status.Cancelled)}>
+                    <Text style={{ color: colorSelection() }}><X /></Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => remove(task.id)}>
-                    <Trash/>
+                    <Trash />
                 </TouchableOpacity>
             </View>
         </Animated.View>
         <Animated.View style={{ transform: [{ translateX: slideAnim }] }}>
-            <TouchableOpacity activeOpacity={1} style={[styles.container, {backgroundColor: colorSelection()}]} onPress={togglePanel}>
+            <TouchableOpacity activeOpacity={1} style={[styles.container, { backgroundColor: colorSelection() }]} onPress={togglePanel}>
                 <Text style={styles.title}>{task.title}</Text>
 
-                <Text> {task.descriptionText} </Text>
-                <Text> {task.location} </Text>
+                <Text style={styles.text}> {task.descriptionText} </Text>
+
+                <View style={styles.icon}>
+                    <Map />
+                    <Text> {task.location} </Text>
+                </View>
 
                 <Text style={styles.separator}></Text>
 
                 <View style={styles.footer}>
-                    <Text>{JSON.stringify(task.completionDate)}</Text>
+                    <View style={styles.icon}>
+                        <Calendar />
+                        <Text>{JSON.stringify(task.completionDate)}</Text>
+                    </View>
                     <Text>{task.status}</Text>
                 </View>
             </TouchableOpacity >
@@ -131,6 +142,21 @@ const styles = StyleSheet.create({
     footer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+    },
+    text: {
+        fontWeight: '400',
+        fontSize: 14,
+        lineHeight: 14,
+        color: '#0000008A',
+    },
+    icon: {
+        flexDirection: 'row',
+        gap: 4,
+
+        fontWeight: '400',
+        fontSize: 14,
+        lineHeight: 14,
+        color: '#000000CC',
     },
 
     panel: {

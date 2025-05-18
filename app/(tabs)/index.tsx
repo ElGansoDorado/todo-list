@@ -1,24 +1,26 @@
 import { Image } from 'expo-image';
 import { Platform, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ScrollView, Text, View, Button } from 'react-native';
+import { ScrollView, View, Button } from 'react-native';
 
-import { useEffect, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
+
+import { useCallback, useState } from 'react';
 import { getList } from '@/constants/api';
-import { Task } from '@/constants/Types';
+import { Task, Status } from '@/constants/Types';
 import TaskItem from '@/components/TaskItem';
-import { deleteTask } from '@/constants/api';
+import { deleteTask, saveList } from '@/constants/api';
 
 export default function HomeScreen() {
   const [list, setList] = useState<Task[]>();
 
-  useEffect(() => {
+  useFocusEffect(useCallback(() => {
     const loader = async () => {
       setList(await getList())
     }
 
     loader();
-  }, [])
+  }, []))
 
   const remove = async (id: number) => {
     const newList = await deleteTask(id)
@@ -30,6 +32,22 @@ export default function HomeScreen() {
     await AsyncStorage.clear();
   }
 
+  const switchStatus = async (id: number, status: Status) => {
+    var i: number = 0;
+
+    const newArray = list?.map((item) => {
+      if (item.id === id) {
+        const newTask = item;
+        newTask.status = status;
+        return newTask;
+      }
+
+      return item;
+    });
+
+    setList(newArray);
+    saveList(newArray as Task[]);
+  }
 
   return (
     <ScrollView style={styles.carousel}>
@@ -37,7 +55,8 @@ export default function HomeScreen() {
         {list && list?.map((item) => <TaskItem
           key={item.id}
           task={item}
-          remove={remove} />)}
+          remove={remove}
+          switchStatus={switchStatus} />)}
       </View>
       <Button onPress={clear} title='Clear' />
     </ScrollView>
