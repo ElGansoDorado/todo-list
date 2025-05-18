@@ -113,7 +113,7 @@ export default function HomeScreen() {
         <DateInput 
           error={false} 
           label='Filter for date'
-          date={filterDate ?? new Date}
+          date={filterDate}
           setDate={setFilterDate}/>
       </View>
       <ScrollView horizontal>

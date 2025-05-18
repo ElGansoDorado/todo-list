@@ -6,8 +6,8 @@ import { useState } from 'react';
 type Props = {
     error: boolean,
     label: string,
-    date: Date,
-    setDate: (v: Date) => void,
+    date: Date | undefined,
+    setDate: (v: Date | undefined) => void,
 }
 
 export function DateInput({ error, label, date, setDate }: Props) {
@@ -22,16 +22,16 @@ export function DateInput({ error, label, date, setDate }: Props) {
     return <View style={styles.container}>
         <Text style={styles.label}>{label}</Text>
         <TouchableOpacity style={error ? styles.inputError : styles.input} onPress={() => setShow(true)}>
-            <Text style={styles.textDate}>{date.toLocaleDateString()}</Text>
+            <Text style={styles.textDate}>{date !== undefined ? date.toLocaleDateString() : "--.--.----"}</Text>
 
-            <TouchableOpacity style={styles.clear} onPress={() => setDate(new Date())}>
+            <TouchableOpacity style={styles.clear} onPress={() => setDate(undefined)}>
                 <Text style={styles.clearText}>X</Text>
             </TouchableOpacity>
         </TouchableOpacity>
 
         {show && (
             <DateTimePicker
-                value={date}
+                value={date as Date}
                 mode="date"
                 display="default"
                 onChange={onChange}
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#313131',
 
         borderWidth: 1,
-        borderColor: 'red',
+        borderColor: '#FF5964',
         borderRadius: 10,
     },
     textDate: {

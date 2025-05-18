@@ -10,7 +10,7 @@ import { createTask } from '@/constants/api';
 export default function CreateScreen() {
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('');
-  const [date, setDate] = useState(new Date());
+  const [inputDate, setInputDate] = useState<Date | undefined>(new Date());
   const [text, setText] = useState('');
 
   const [titleError, setTitleError] = useState('');
@@ -22,7 +22,7 @@ export default function CreateScreen() {
     setTitle('');
     setLocation('');
     setText('');
-    setDate(new Date());
+    setInputDate(new Date());
   }
 
   const clearFormError = () => {
@@ -50,7 +50,7 @@ export default function CreateScreen() {
       return false;
     }
 
-    if (date === undefined) {
+    if (inputDate === undefined) {
       setDateError('the date field is not filled in');
       return false;
     }
@@ -60,6 +60,7 @@ export default function CreateScreen() {
 
   const created = () => {
     if (validation()) {
+      const date = inputDate as Date;
       createTask({ title, date, text, location });
       clearForm();
     }
@@ -99,15 +100,16 @@ export default function CreateScreen() {
 
           <DateInput 
             error={dateError !== ''} 
-            label="Date" date={date} 
-            setDate={setDate}/>
+            label="Date" date={inputDate} 
+            setDate={setInputDate}/>
 
           <Button color={"#ADC6EF"} title="Create task" onPress={() => created()} />
 
           <View style={styles.error}>
-            <Text style={styles.error}>{titleError && titleError}</Text>
-            <Text style={styles.error}>{locationError && locationError}</Text>
-            <Text style={styles.error}>{textError && textError}</Text>
+            <Text style={styles.error}>{titleError}</Text>
+            <Text style={styles.error}>{locationError}</Text>
+            <Text style={styles.error}>{textError}</Text>
+            <Text style={styles.error}>{dateError}</Text>
           </View>
         </SafeAreaView>
       </SafeAreaProvider>
@@ -137,6 +139,6 @@ const styles = StyleSheet.create({
   },
   error: {
     alignItems: 'center',
-    color: 'red',
+    color: '#FF5964',
   }
 });
