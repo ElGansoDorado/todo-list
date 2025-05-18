@@ -13,17 +13,16 @@ export default function HomeScreen() {
   const [list, setList] = useState<Task[]>();
 
   useEffect(() => {
-    const testf = async () => {
+    const loader = async () => {
       setList(await getList())
     }
 
-    console.log(list);
-    testf();
+    loader();
   }, [])
 
   const remove = async (id: number) => {
     const newList = await deleteTask(id)
-    setList( newList );
+    setList(newList);
   }
 
   const clear = async () => {
@@ -33,19 +32,23 @@ export default function HomeScreen() {
 
 
   return (
-    <ScrollView >
+    <ScrollView style={styles.carousel}>
       <View style={styles.container}>
-        {list?.map((item) => <TaskItem
+        {list && list?.map((item) => <TaskItem
           key={item.id}
           task={item}
-          remove={remove}/>)}
+          remove={remove} />)}
       </View>
-      <Button onPress={clear} title='Clear'/>
+      <Button onPress={clear} title='Clear' />
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  carousel: {
+    flex: 1,
+    backgroundColor: '#1E1E1E',
+  },
   container: {
     gap: 12,
     margin: 20,

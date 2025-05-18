@@ -118,7 +118,7 @@ export default function CreateScreen() {
             onChange={onChange}
             setDate={setDate}/>
 
-          <Button title="Нажми меня" onPress={() => created()} />
+          <Button title="Create task" onPress={() => created()} />
 
           <View style={styles.error}>
             <Text style={styles.error}>{titleError && titleError}</Text>
