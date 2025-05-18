@@ -71,7 +71,7 @@ export default function TaskItem({ task, remove, switchStatus }: Props) {
     }
 
     return <View>
-        <Animated.View style={{ translateX: panelAnim }}>
+        <Animated.View style={{ transform: [{ translateX: panelAnim } ]}}>
             <View style={[styles.panel, { outlineColor: colorSelection() }]}>
                 <TouchableOpacity onPress={() => switchStatus(task.id, Status.Active)}>
                     <Text style={{ color: colorSelection() }}><Loader /></Text>
@@ -103,16 +103,13 @@ export default function TaskItem({ task, remove, switchStatus }: Props) {
                 <View style={styles.footer}>
                     <View style={styles.icon}>
                         <Calendar />
-                        <Text>{JSON.stringify(task.completionDate)}</Text>
+                        <Text>{task.completionDate.toLocaleDateString()}</Text>
                     </View>
                     <Text>{task.status}</Text>
                 </View>
             </TouchableOpacity >
         </Animated.View>
     </View>
-
-
-
 }
 
 const styles = StyleSheet.create({

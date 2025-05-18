@@ -1,8 +1,8 @@
 export enum Status { 
     Inactive = "In review ",
     Active = "In progress", 
-    Completed = "completed", 
-    Cancelled = "cancelled", 
+    Completed = "Completed", 
+    Cancelled = "Cancelled", 
 };
 
 export interface Task {

@@ -7,7 +7,20 @@ export const getList = async () => {
     const list = await AsyncStorage.getItem(KEY);
 
     if (list) {
-        const taskList: Task[] = JSON.parse(list);
+        const taskList: Task[] = JSON.parse(list).map((task: Task) => {
+            const newTask: Task = 
+            {   
+                id: task.id, 
+                title: task.title, 
+                descriptionText: task.descriptionText, 
+                location: task.location, 
+                completionDate: new Date(task.completionDate), 
+                createdDate: new Date(task.createdDate), 
+                status: task.status,
+            }
+
+            return newTask;
+        });
         return taskList;
     }
 }

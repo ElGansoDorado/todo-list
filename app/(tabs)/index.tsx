@@ -10,6 +10,7 @@ import { getList } from '@/constants/api';
 import { Task, Status } from '@/constants/Types';
 import TaskItem from '@/components/TaskItem';
 import { deleteTask, saveList } from '@/constants/api';
+import { Recommended } from '@/components/Recommended';
 
 export default function HomeScreen() {
   const [list, setList] = useState<Task[]>();
@@ -51,6 +52,14 @@ export default function HomeScreen() {
 
   return (
     <ScrollView style={styles.carousel}>
+      <ScrollView horizontal>
+        <View style={styles.row}>
+          <Recommended title="In review" number={list?.length as number} sort={() => {}} color='#ADC6EF' />
+          <Recommended title="In progress" number={list?.length as number} sort={() => {}} color='#E6F58A' />
+          <Recommended title="Completed" number={list?.length as number} sort={() => {}} color='#92CA7F' />
+          <Recommended title="Cancelled" number={list?.length as number} sort={() => {}} color='#FF5964' />
+        </View>
+      </ScrollView>
       <View style={styles.container}>
         {list && list?.map((item) => <TaskItem
           key={item.id}
@@ -67,6 +76,10 @@ const styles = StyleSheet.create({
   carousel: {
     flex: 1,
     backgroundColor: '#1E1E1E',
+  },
+  row: {
+    flexDirection: 'row',
+    gap: 8,
   },
   container: {
     gap: 12,
