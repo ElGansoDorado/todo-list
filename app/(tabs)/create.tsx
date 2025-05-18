@@ -1,12 +1,10 @@
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
-import { StyleSheet, View, Button, Text, Platform } from 'react-native';
-
+import { StyleSheet, View, Button, Text } from 'react-native';
 import { useState } from 'react';
 
 import { RowInput } from '@/components/ui/input/RowInput';
 import { MultilineInput } from '@/components/ui/input/MultilineInput';
 import { DateInput } from '@/components/ui/input/DateInput';
-
 import { createTask } from '@/constants/api';
 
 export default function CreateScreen() {
@@ -19,8 +17,6 @@ export default function CreateScreen() {
   const [locationError, setLocationError] = useState('');
   const [dateError, setDateError] = useState('');
   const [textError, setTextError] = useState('');
-
-  const [show, setShow] = useState(false);
 
   const clearForm = () => {
     setTitle('');
@@ -69,16 +65,6 @@ export default function CreateScreen() {
     }
   }
 
-  const onChange = (event: any, selectedDate: any) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
-    setDate(currentDate);
-  };
-
-  const showDatepicker = () => {
-    setShow(true);
-  };
-
   return (
     <View style={styles.container}>
       <SafeAreaProvider>
@@ -114,9 +100,6 @@ export default function CreateScreen() {
           <DateInput 
             error={dateError !== ''} 
             label="Date" date={date} 
-            show={show} 
-            setShow={setShow} 
-            onChange={onChange}
             setDate={setDate}/>
 
           <Button color={"#ADC6EF"} title="Create task" onPress={() => created()} />

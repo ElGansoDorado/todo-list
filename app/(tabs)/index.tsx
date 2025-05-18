@@ -1,15 +1,14 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ScrollView, View, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ScrollView, View, Button } from 'react-native';
-
+import { useCallback, useState, useEffect } from 'react';
 import { useFocusEffect } from 'expo-router';
-import { useCallback, useState, useRef, useEffect } from 'react';
 
 import { getList } from '@/constants/api';
 import { Task, Status } from '@/constants/Types';
 import TaskItem from '@/components/TaskItem';
 import { deleteTask, saveList } from '@/constants/api';
 import { Recommended } from '@/components/Recommended';
+import { DateInput } from '@/components/ui/input/DateInput';
 
 export default function HomeScreen() {
   const [list, setList] = useState<Task[]>();
@@ -28,24 +27,28 @@ export default function HomeScreen() {
 
   const search = () => {
     const searchList: Task[] = list?.filter((item) => {
-      if (filterDate !== undefined && item.completionDate !== filterDate) {
-        return false;
+      if (filterDate !== undefined && item.completionDate === filterDate) {
+        return true;
       }
 
       // Проверка по статусам
-      if (filterInactive && item.status !== Status.Inactive) {
-        return false;
+      if (filterInactive && item.status === Status.Inactive) {
+        return true;
       }
 
-      if (filterActive && item.status !== Status.Active) {
-        return false;
+      if (filterActive && item.status === Status.Active) {
+        return true;
       }
 
-      if (filterCompleted && item.status !== Status.Completed) {
-        return false;
+      if (filterCompleted && item.status === Status.Completed) {
+        return true;
       }
 
-      if (filterCancelled && item.status !== Status.Cancelled) {
+      if (filterCancelled && item.status === Status.Cancelled) {
+        return true;
+      }
+
+      if (filterDate || filterInactive || filterActive || filterCompleted || filterCancelled) {
         return false;
       }
 
@@ -106,6 +109,13 @@ export default function HomeScreen() {
 
   return (
     <ScrollView style={styles.carousel}>
+      <View style={styles.container}>
+        <DateInput 
+          error={false} 
+          label='Filter for date'
+          date={filterDate ?? new Date}
+          setDate={setFilterDate}/>
+      </View>
       <ScrollView horizontal>
         <View style={styles.row}>
           <Recommended title="In review" number={inInactiv} sort={() => setFilterInactive(!filterInactive)} color='#ADC6EF' />
@@ -139,6 +149,6 @@ const styles = StyleSheet.create({
   },
   container: {
     gap: 12,
-    margin: 20,
+    marginHorizontal: 20,
   },
 });

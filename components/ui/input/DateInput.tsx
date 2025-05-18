@@ -1,17 +1,24 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native"
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { Platform } from "react-native";
+import { useState } from 'react';
 
 type Props = {
     error: boolean,
     label: string,
     date: Date,
     setDate: (v: Date) => void,
-    onChange: (event: any, selectedDate: any) => void,
-    show: boolean,
-    setShow: (v: boolean) => void,
 }
 
-export function DateInput({ error, label, date, show, onChange, setShow, setDate }: Props) {
+export function DateInput({ error, label, date, setDate }: Props) {
+    const [show, setShow] = useState(false);
+
+    const onChange = (event: any, selectedDate: any) => {
+        const currentDate = selectedDate || date;
+        setShow(Platform.OS === 'ios');
+        setDate(currentDate);
+    };
+
     return <View style={styles.container}>
         <Text style={styles.label}>{label}</Text>
         <TouchableOpacity style={error ? styles.inputError : styles.input} onPress={() => setShow(true)}>
@@ -21,7 +28,7 @@ export function DateInput({ error, label, date, show, onChange, setShow, setDate
                 <Text style={styles.clearText}>X</Text>
             </TouchableOpacity>
         </TouchableOpacity>
-        
+
         {show && (
             <DateTimePicker
                 value={date}
