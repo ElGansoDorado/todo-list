@@ -1,11 +1,10 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView, View, Button } from 'react-native';
 
 import { useFocusEffect } from 'expo-router';
+import { useCallback, useState, useRef, useEffect } from 'react';
 
-import { useCallback, useState } from 'react';
 import { getList } from '@/constants/api';
 import { Task, Status } from '@/constants/Types';
 import TaskItem from '@/components/TaskItem';
@@ -14,14 +13,69 @@ import { Recommended } from '@/components/Recommended';
 
 export default function HomeScreen() {
   const [list, setList] = useState<Task[]>();
+  const [sList, setSList] = useState<Task[]>();
+
+  const [inInactiv, setInInactiv] = useState(0);
+  const [inActiv, setInActiv] = useState(0);
+  const [inCompleted, setInCompleted] = useState(0);
+  const [inCancelled, setCancelled] = useState(0);
+
+  const [filterDate, setFilterDate] = useState<Date>()
+  const [filterInactive, setFilterInactive] = useState(false)
+  const [filterActive, setFilterActive] = useState(false)
+  const [filterCompleted, setFilterComleted] = useState(false)
+  const [filterCancelled, setFilterCancelled] = useState(false)
+
+  const search = () => {
+    const searchList: Task[] = list?.filter((item) => {
+      if (filterDate !== undefined && item.completionDate !== filterDate) {
+        return false;
+      }
+
+      // Проверка по статусам
+      if (filterInactive && item.status !== Status.Inactive) {
+        return false;
+      }
+
+      if (filterActive && item.status !== Status.Active) {
+        return false;
+      }
+
+      if (filterCompleted && item.status !== Status.Completed) {
+        return false;
+      }
+
+      if (filterCancelled && item.status !== Status.Cancelled) {
+        return false;
+      }
+
+      return true;
+    }) as Task[];
+
+    return searchList;
+  }
+
+  const count = (status: Status) => {
+    return list?.filter((item) => item.status === status).length as number;
+  }
 
   useFocusEffect(useCallback(() => {
     const loader = async () => {
-      setList(await getList())
+      setList(await getList());
     }
-
     loader();
   }, []))
+
+  useEffect(() => {
+    setInInactiv(count(Status.Inactive));
+    setInActiv(count(Status.Active));
+    setInCompleted(count(Status.Completed));
+    setCancelled(count(Status.Cancelled));
+  }, [list])
+
+  useEffect(() => {
+    setSList(search());
+  }, [list, filterDate, filterInactive, filterActive, filterCompleted, filterCancelled])
 
   const remove = async (id: number) => {
     const newList = await deleteTask(id)
@@ -54,20 +108,20 @@ export default function HomeScreen() {
     <ScrollView style={styles.carousel}>
       <ScrollView horizontal>
         <View style={styles.row}>
-          <Recommended title="In review" number={list?.length as number} sort={() => {}} color='#ADC6EF' />
-          <Recommended title="In progress" number={list?.length as number} sort={() => {}} color='#E6F58A' />
-          <Recommended title="Completed" number={list?.length as number} sort={() => {}} color='#92CA7F' />
-          <Recommended title="Cancelled" number={list?.length as number} sort={() => {}} color='#FF5964' />
+          <Recommended title="In review" number={inInactiv} sort={() => setFilterInactive(!filterInactive)} color='#ADC6EF' />
+          <Recommended title="In progress" number={inActiv} sort={() => setFilterActive(!filterActive)} color='#E6F58A' />
+          <Recommended title="Completed" number={inCompleted} sort={() => setFilterComleted(!filterCompleted)} color='#92CA7F' />
+          <Recommended title="Cancelled" number={inCancelled} sort={() => setFilterCancelled(!filterCancelled)} color='#FF5964' />
         </View>
       </ScrollView>
       <View style={styles.container}>
-        {list && list?.map((item) => <TaskItem
+        {list && sList?.map((item) => <TaskItem
           key={item.id}
           task={item}
           remove={remove}
           switchStatus={switchStatus} />)}
       </View>
-      <Button onPress={clear} title='Clear' />
+      <Button onPress={clear} color={"#ADC6EF"} title='Clear' />
     </ScrollView>
   );
 }
@@ -80,6 +134,8 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     gap: 8,
+    marginHorizontal: 20,
+    marginTop: 10,
   },
   container: {
     gap: 12,

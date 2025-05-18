@@ -2,7 +2,6 @@ import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { StyleSheet, View, Button, Text, Platform } from 'react-native';
 
 import { useState } from 'react';
-import { Colors } from '@/constants/Colors';
 
 import { RowInput } from '@/components/ui/input/RowInput';
 import { MultilineInput } from '@/components/ui/input/MultilineInput';
@@ -85,6 +84,8 @@ export default function CreateScreen() {
       <SafeAreaProvider>
         <SafeAreaView style={{gap: 16}}>
 
+          <Text style={styles.title}>New Task</Text>
+
           <RowInput
             error={titleError !== ''}
             onChangeValue={setTitle}
@@ -118,7 +119,7 @@ export default function CreateScreen() {
             onChange={onChange}
             setDate={setDate}/>
 
-          <Button title="Create task" onPress={() => created()} />
+          <Button color={"#ADC6EF"} title="Create task" onPress={() => created()} />
 
           <View style={styles.error}>
             <Text style={styles.error}>{titleError && titleError}</Text>
@@ -134,11 +135,16 @@ export default function CreateScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
-    paddingHorizontal: 10,
-    paddingVertical: 15,
-
+    padding: 20,
     backgroundColor: '#1E1E1E',
+  },
+  title: {
+    color: '#FFF',
+    fontSize: 17,
+    fontWeight: '600',
+    lineHeight: 22,
+    textAlign: 'center',
+    verticalAlign: 'middle',
   },
   box: {
     marginBottom: 24,

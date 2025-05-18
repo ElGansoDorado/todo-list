@@ -34,7 +34,6 @@ export const createTask = async ({ title, date, text, location }: { title: strin
 
     if (list !== null && list.length >= 0) {
         const taskList: Task[] = JSON.parse(list as string);
-        console.log(taskList);
 
         const newTask: Task = {
             id: taskList[taskList.length - 1].id + 1,
@@ -47,10 +46,8 @@ export const createTask = async ({ title, date, text, location }: { title: strin
 
             status: Status.Inactive,
         }
-        console.log('я дополняю');
 
         taskList.push(newTask);
-        console.log(newTask);
         await AsyncStorage.setItem(KEY, JSON.stringify(taskList));
     }
     else {
@@ -66,7 +63,6 @@ export const createTask = async ({ title, date, text, location }: { title: strin
             status: Status.Inactive,
         }
 
-        console.log('я тут');
         const newTaskList: Task[] = [newTask];
         await AsyncStorage.setItem(KEY, JSON.stringify(newTaskList));
     }

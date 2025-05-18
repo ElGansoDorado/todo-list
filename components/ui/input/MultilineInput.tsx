@@ -50,15 +50,16 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     inputError: {
-        height: 40,
-        padding: 12,
+        height: 125,
+        paddingVertical: 16,
+        paddingHorizontal: 12,
 
         color: '#FFF',
         backgroundColor: '#313131',
 
         borderWidth: 1,
         borderColor: 'red',
-        borderRadius: 22,
+        borderRadius: 10,
     },
     maxTextBox: {
         alignItems: 'flex-end',
@@ -68,12 +69,5 @@ const styles = StyleSheet.create({
         fontSize: 12,
         lineHeight: 18,
         color: '#FFF'
-        //         font-family: Plus Jakarta Sans;
-        // font-weight: 500;
-        // font-size: 12px;
-        // line-height: 160%;
-        // letter-spacing: -2%;
-        // text-align: right;
-
     },
 });

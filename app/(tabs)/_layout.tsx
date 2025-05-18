@@ -3,16 +3,15 @@ import React from 'react';
 import { Platform } from 'react-native';
 
 import { IconSymbol } from '@/components/ui/IconSymbol';
-import { Colors } from '@/constants/Colors';
 
 export default function TabLayout() {
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors['light'].text,
-        tabBarInactiveBackgroundColor: Colors.light.tint,
-        tabBarActiveBackgroundColor: Colors.light.background,
+        tabBarActiveTintColor: "#ADC6EF",
+        tabBarActiveBackgroundColor: "#1E1E1E",
+        tabBarInactiveBackgroundColor: "#1E1E1E",
         headerShown: false,
         tabBarStyle: Platform.select({
           ios: {

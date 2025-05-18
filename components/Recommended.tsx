@@ -14,6 +14,8 @@ export function Recommended({ title, number, sort, color }: Props) {
     const textAnim = useRef(new Animated.Value(0)).current; // для открытия панели
 
     const togglePanel = () => {
+        sort();
+        
         if (isOpen) {
             // Закрываем панель и возвращаем кнопку в исходное положение
             Animated.parallel([

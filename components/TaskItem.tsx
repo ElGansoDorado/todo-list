@@ -54,19 +54,17 @@ export default function TaskItem({ task, remove, switchStatus }: Props) {
 
     // выбираем один из вариантов цветов по id(для сохранения цвета при новой загрузки)
     const colorSelection = (): string => {
-        const v: number = task.id % 4;
-
-        switch (v) {
-            case 0:
-                return '#92CA7F';
-            case 1:
+        switch (task.status) {
+            case Status.Inactive:
                 return '#ADC6EF';
-            case 2:
+            case Status.Active:
                 return '#E6F58A';
-            case 3:
-                return '#EDEDED';
-            default:
+            case Status.Completed:
                 return '#92CA7F';
+            case Status.Cancelled:
+                return '#FF5964';
+            default:
+                return '#EDEDED';
         }
     }
 

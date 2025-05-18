@@ -53,15 +53,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   inputError: {
-    height: 40,
-    padding: 12,
+    height: 50,
+    paddingVertical: 16,
+    paddingLeft: 12,
+    paddingRight: 44,
 
     color: '#FFF',
     backgroundColor: '#313131',
 
     borderWidth: 1,
     borderColor: 'red',
-    borderRadius: 22,
+    borderRadius: 10,
   },
 
   clear: {
