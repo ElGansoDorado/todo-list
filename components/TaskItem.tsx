@@ -1,7 +1,10 @@
 import { StyleSheet, View, Text, TouchableOpacity, Animated } from "react-native"
 import { useState, useRef } from "react";
 import { Task } from "@/constants/Types"
-import { Background } from "@react-navigation/elements";
+import Trash from '@/assets/svg/trash-2.svg'
+import X from '@/assets/svg/x-circle.svg'
+import Loader from '@/assets/svg/loader.svg'
+import Check from '@/assets/svg/check.svg'
 
 type Props = {
     task: Task,
@@ -33,7 +36,7 @@ export default function TaskItem({ task, remove }: Props) {
             setIsOpen(true);
             Animated.parallel([
                 Animated.timing(slideAnim, {
-                    toValue: -40, // смещение влево на 20 пикселей
+                    toValue: -55, // смещение влево на 20 пикселей
                     duration: 300,
                     useNativeDriver: true,
                 }),
@@ -64,19 +67,19 @@ export default function TaskItem({ task, remove }: Props) {
     }
 
     return <View>
-        <Animated.View style={{ transform: [{ translateX: panelAnim }] }}>
-            <View style={styles.panel}>
-                <TouchableOpacity style={styles.panelItem}>
-                    <Text>L</Text>
+        <Animated.View style={{translateX: panelAnim}}>
+            <View style={[styles.panel, {outlineColor: colorSelection()}]}>
+                <TouchableOpacity >
+                    <Text style={{color: colorSelection()}}><Loader/></Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.panelItem}>
-                    <Text>K</Text>
+                <TouchableOpacity >
+                    <Text style={{color: colorSelection()}}><Check /></Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.panelItem}>
-                    <Text>c</Text>
+                <TouchableOpacity >
+                    <Text style={{color: colorSelection()}}><X/></Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.panelItem} onPress={() => remove(task.id)}>
-                    <Text>D</Text>
+                <TouchableOpacity onPress={() => remove(task.id)}>
+                    <Trash/>
                 </TouchableOpacity>
             </View>
         </Animated.View>
@@ -142,8 +145,4 @@ const styles = StyleSheet.create({
         position: "absolute",
         right: 0,
     },
-    panelItem: {
-        width: 22,
-        height: 22,
-    }
 });
