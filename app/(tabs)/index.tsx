@@ -1,7 +1,7 @@
 import { Image } from 'expo-image';
 import { Platform, StyleSheet } from 'react-native';
-
-import { ScrollView, Text, View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ScrollView, Text, View, Button } from 'react-native';
 
 import { useEffect, useState } from 'react';
 import { getList } from '@/constants/api';
@@ -26,6 +26,12 @@ export default function HomeScreen() {
     setList( newList );
   }
 
+  const clear = async () => {
+    setList(undefined);
+    await AsyncStorage.clear();
+  }
+
+
   return (
     <ScrollView >
       <View style={styles.container}>
@@ -34,6 +40,7 @@ export default function HomeScreen() {
           task={item}
           remove={remove}/>)}
       </View>
+      <Button onPress={clear} title='Clear'/>
     </ScrollView>
   );
 }

@@ -1,30 +1,38 @@
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
-import { StyleSheet, View, Button, Text } from 'react-native';
+import { StyleSheet, View, Button, Text, Platform } from 'react-native';
 
 import { useState } from 'react';
 import { Colors } from '@/constants/Colors';
 
-import { CustomInput } from '@/components/CustomInput';
-import { createTask } from '@/constants/api';
+import { RowInput } from '@/components/ui/input/RowInput';
+import { MultilineInput } from '@/components/ui/input/MultilineInput';
+import { DateInput } from '@/components/ui/input/DateInput';
 
+import { createTask } from '@/constants/api';
 
 export default function CreateScreen() {
   const [title, setTitle] = useState('');
-  const [date, setDate] = useState('');
+  const [location, setLocation] = useState('');
+  const [date, setDate] = useState(new Date());
   const [text, setText] = useState('');
 
   const [titleError, setTitleError] = useState('');
+  const [locationError, setLocationError] = useState('');
   const [dateError, setDateError] = useState('');
   const [textError, setTextError] = useState('');
 
+  const [show, setShow] = useState(false);
+
   const clearForm = () => {
     setTitle('');
-    setDate('');
+    setLocation('');
     setText('');
+    setDate(new Date());
   }
 
   const clearFormError = () => {
     setTitleError('');
+    setLocationError('');
     setDateError('');
     setTextError('');
   }
@@ -42,7 +50,12 @@ export default function CreateScreen() {
       return false;
     }
 
-    if (date.length <= 0) {
+    if (location.length <= 0) {
+      setLocationError('the location field is not filled in');
+      return false;
+    }
+
+    if (date === undefined) {
       setDateError('the date field is not filled in');
       return false;
     }
@@ -52,46 +65,64 @@ export default function CreateScreen() {
 
   const created = () => {
     if (validation()) {
-      createTask({ title, date, text });
+      createTask({ title, date, text, location });
       clearForm();
     }
   }
 
+  const onChange = (event: any, selectedDate: any) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+  };
+
+  const showDatepicker = () => {
+    setShow(true);
+  };
+
   return (
     <View style={styles.container}>
       <SafeAreaProvider>
-        <SafeAreaView>
-          <View style={styles.box}>
-            <CustomInput
-              error={titleError !== ''}
-              onChangeValue={setTitle}
-              value={title}
-              label='Title'
-              placeholder='your task title'
-            />
+        <SafeAreaView style={{gap: 16}}>
 
-            <CustomInput
-              error={dateError !== ''}
-              onChangeValue={setDate}
-              value={date}
-              label='Date'
-              placeholder='date of completion'
-            />
+          <RowInput
+            error={titleError !== ''}
+            onChangeValue={setTitle}
+            value={title}
+            label='Title'
+            placeholder='your task title'
+          />
 
-          </View>
-
-          <CustomInput
+          <MultilineInput
             error={textError !== ''}
             onChangeValue={setText}
             value={text}
-            label='Text'
-            placeholder='your task text'
+            label='Description'
+            placeholder='your task description'
+            max={200}
           />
 
+          <RowInput
+            error={locationError !== ''}
+            onChangeValue={setLocation}
+            value={location}
+            label='Locate'
+            placeholder='locate of completion'
+          />
+
+          <DateInput 
+            error={dateError !== ''} 
+            label="Date" date={date} 
+            show={show} 
+            setShow={setShow} 
+            onChange={onChange}
+            setDate={setDate}/>
+
           <Button title="Нажми меня" onPress={() => created()} />
+
           <View style={styles.error}>
             <Text style={styles.error}>{titleError && titleError}</Text>
-            <Text style={styles.error}>{dateError && dateError}</Text>
+            <Text style={styles.error}>{locationError && locationError}</Text>
             <Text style={styles.error}>{textError && textError}</Text>
           </View>
         </SafeAreaView>
@@ -102,15 +133,12 @@ export default function CreateScreen() {
 
 const styles = StyleSheet.create({
   container: {
-
     flex: 1,
 
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 15,
-    paddingBottom: 15,
+    paddingHorizontal: 10,
+    paddingVertical: 15,
 
-    backgroundColor: Colors.light.background,
+    backgroundColor: '#1E1E1E',
   },
   box: {
     marginBottom: 24,

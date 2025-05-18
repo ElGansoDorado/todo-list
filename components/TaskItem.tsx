@@ -18,12 +18,12 @@ export default function TaskItem({ task, remove }: Props) {
         </View>
 
         <Text> {task.descriptionText} </Text>
-        <Text> Location </Text>
+        <Text> {task.location} </Text>
 
         <Text style={styles.separator}></Text>
 
         <View style={styles.footer}>
-            <Text>{task.completionDate}</Text>
+            <Text>{task.completionDate.toDateString()}</Text>
             <Text>{task.status}</Text>
         </View>
     </View >

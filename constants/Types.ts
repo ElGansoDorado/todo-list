@@ -10,9 +10,10 @@ export interface Task {
 
     title: string,
     descriptionText: string,
+    location: string,
     
-    completionDate: string,
-    createdDate: string,
+    completionDate: Date,
+    createdDate: Date,
     
     status: Status; 
 }

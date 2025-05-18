@@ -12,7 +12,7 @@ export const getList = async () => {
     }
 }
 
-export const createTask = async ({ title, date, text }: { title: string, date: string, text: string }) => {
+export const createTask = async ({ title, date, text, location }: { title: string, date: Date, text: string, location: string }) => {
     const list = await AsyncStorage.getItem(KEY)
 
     if (list !== null && list.length >= 0) {
@@ -22,9 +22,10 @@ export const createTask = async ({ title, date, text }: { title: string, date: s
             id: taskList[taskList.length - 1].id + 1,
             title: title,
             descriptionText: text,
+            location: location,
 
             completionDate: date,
-            createdDate: 'new Date',
+            createdDate: new Date(),
 
             status: Status.Active,
         }
@@ -37,9 +38,10 @@ export const createTask = async ({ title, date, text }: { title: string, date: s
             id: 0,
             title: title,
             descriptionText: text,
+            location: location,
 
             completionDate: date,
-            createdDate: 'new Date',
+            createdDate: new Date(),
 
             status: Status.Active,
         }
