@@ -1,4 +1,5 @@
 import { StyleSheet, View, Text, TouchableOpacity, Animated } from "react-native"
+import { Link } from "expo-router";
 import { useState, useRef } from "react";
 import { Task, Status } from "@/constants/Types"
 import Trash from '@/assets/svg/trash-2.svg'

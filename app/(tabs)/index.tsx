@@ -27,7 +27,7 @@ export default function HomeScreen() {
 
   const search = () => {
     const searchList: Task[] = list?.filter((item) => {
-      if (filterDate !== undefined && item.completionDate === filterDate) {
+      if (filterDate !== undefined && item.completionDate.getDate() === filterDate.getDate()) {
         return true;
       }
 
@@ -85,11 +85,6 @@ export default function HomeScreen() {
     setList(newList);
   }
 
-  const clear = async () => {
-    setList(undefined);
-    await AsyncStorage.clear();
-  }
-
   const switchStatus = async (id: number, status: Status) => {
     var i: number = 0;
 
@@ -131,7 +126,6 @@ export default function HomeScreen() {
           remove={remove}
           switchStatus={switchStatus} />)}
       </View>
-      <Button onPress={clear} color={"#ADC6EF"} title='Clear' />
     </ScrollView>
   );
 }
@@ -149,6 +143,7 @@ const styles = StyleSheet.create({
   },
   container: {
     gap: 12,
+    marginTop: 25,
     marginHorizontal: 20,
   },
 });

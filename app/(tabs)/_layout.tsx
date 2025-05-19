@@ -1,8 +1,7 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
 import { Platform } from 'react-native';
-
-import { IconSymbol } from '@/components/ui/IconSymbol';
+import React from 'react';
+import { FontAwesome } from '@expo/vector-icons';
 
 export default function TabLayout() {
 
@@ -24,15 +23,15 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'New Task',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: 'List',
+          tabBarIcon: ({ color }) => <FontAwesome name='list' size={24} color={color} />,
         }}
       />
       <Tabs.Screen
         name="create"
         options={{
-          title: 'Create',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Add task',
+          tabBarIcon: ({ color }) => <FontAwesome name='plus-circle' size={24} color={color} />,
         }}
       />
     </Tabs>

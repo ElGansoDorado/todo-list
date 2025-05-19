@@ -31,7 +31,7 @@ export function DateInput({ error, label, date, setDate }: Props) {
 
         {show && (
             <DateTimePicker
-                value={date as Date}
+                value={date ?? new Date()}
                 mode="date"
                 display="default"
                 onChange={onChange}
