@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native"
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { Platform } from "react-native";
 import { useState } from 'react';
 
@@ -13,7 +14,12 @@ type Props = {
 export function DateInput({ error, label, date, setDate }: Props) {
     const [show, setShow] = useState(false);
 
-    const onChange = (event: any, selectedDate: any) => {
+    /**
+    * Обрабатывает изменение выбранной даты.
+    * @param event - событие изменения даты.
+    * @param selectedDate - выбранная дата, может быть undefined.
+    */
+    const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
         const currentDate = selectedDate || date;
         setShow(Platform.OS === 'ios');
         setDate(currentDate);

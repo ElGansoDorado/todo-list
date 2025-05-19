@@ -3,19 +3,23 @@ import { Status, type Task } from '@/types/task';
 
 const KEY = 'LIST';
 
+/**
+ * Загрузка списка задач из хранилища
+ * Создание нового экземпляра элемента Task для сохранения верности всех данных
+ */
 export const getList = async () => {
     const list = await AsyncStorage.getItem(KEY);
 
     if (list) {
         const taskList: Task[] = JSON.parse(list).map((task: Task) => {
-            const newTask: Task = 
-            {   
-                id: task.id, 
-                title: task.title, 
-                descriptionText: task.descriptionText, 
-                location: task.location, 
-                completionDate: new Date(task.completionDate), 
-                createdDate: new Date(task.createdDate), 
+            const newTask: Task =
+            {
+                id: task.id,
+                title: task.title,
+                descriptionText: task.descriptionText,
+                location: task.location,
+                completionDate: new Date(task.completionDate),
+                createdDate: new Date(task.createdDate),
                 status: task.status,
             }
 
@@ -25,6 +29,7 @@ export const getList = async () => {
     }
 }
 
+/** поиск по id */
 export const getTask = async (id: number) => {
     const list = await getList();
 
@@ -35,10 +40,17 @@ export const getTask = async (id: number) => {
     }
 }
 
+
+/** сохранение массива  */
 export const saveList = async (list: Task[]) => {
     await AsyncStorage.setItem(KEY, JSON.stringify(list));
 }
 
+/**
+*Создание таска
+*При пустом массиве, создаёт таск с 0 id
+*при наличии элементов, берёт id последнего и увеличивает на 1, сохраняя элемент в коцне массива
+*/
 export const createTask = async ({ title, date, text, location }: { title: string, date: Date, text: string, location: string }) => {
     const list = await AsyncStorage.getItem(KEY)
 
@@ -58,7 +70,7 @@ export const createTask = async ({ title, date, text, location }: { title: strin
         }
 
         taskList.push(newTask);
-        await AsyncStorage.setItem(KEY, JSON.stringify(taskList));
+        await saveList(taskList);
     }
     else {
         const newTask: Task = {
@@ -74,17 +86,18 @@ export const createTask = async ({ title, date, text, location }: { title: strin
         }
 
         const newTaskList: Task[] = [newTask];
-        await AsyncStorage.setItem(KEY, JSON.stringify(newTaskList));
+        await saveList(newTaskList);
     }
 }
 
+/**удаление таска по айди*/
 export const deleteTask = async (id: number) => {
     const list = await getList()
 
     if (list) {
         const afterRemovalList: Task[] = list.filter((item) => item.id !== id);
 
-        await AsyncStorage.setItem(KEY, JSON.stringify(afterRemovalList));
+        await saveList(afterRemovalList);
 
         return afterRemovalList;
     }

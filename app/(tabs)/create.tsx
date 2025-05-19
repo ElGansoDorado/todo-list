@@ -32,6 +32,7 @@ export default function CreateScreen() {
     setTextError('');
   }
 
+  /** проверка правильности заполнения всех полей  */
   const validation = () => {
     clearFormError();
 
@@ -58,6 +59,7 @@ export default function CreateScreen() {
     return true;
   }
 
+  /** создание Task a при выполнении всех условий валидации  */
   const created = () => {
     if (validation()) {
       const date = inputDate as Date;

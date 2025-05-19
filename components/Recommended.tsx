@@ -15,7 +15,7 @@ export function Recommended({ title, number, sort, color }: Props) {
 
     const togglePanel = () => {
         sort();
-        
+
         if (isOpen) {
             // Закрываем панель и возвращаем кнопку в исходное положение
             Animated.parallel([
@@ -49,11 +49,11 @@ export function Recommended({ title, number, sort, color }: Props) {
     };
 
     return <TouchableOpacity activeOpacity={1} onPress={togglePanel} style={styles.container}>
-        <Animated.View style={{transform: [{ translateX: textAnim }]}}>
+        <Animated.View style={{ transform: [{ translateX: textAnim }] }}>
             <Text style={styles.text}>{title}</Text>
         </Animated.View>
 
-        <Animated.View style={[styles.circle, {backgroundColor: color, transform: [{ translateX: circleAnim}]}]}>
+        <Animated.View style={[styles.circle, { backgroundColor: color, transform: [{ translateX: circleAnim }] }]}>
             <Text>{number}</Text>
         </Animated.View>
     </TouchableOpacity>

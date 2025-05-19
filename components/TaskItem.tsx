@@ -59,7 +59,6 @@ export default function TaskItem({ task, remove, switchStatus }: Props) {
         router.push(`/task/${task.id}`);
     }
 
-    // выбираем один из вариантов цветов по id(для сохранения цвета при новой загрузки)
     const colorSelection = (): string => {
         switch (task.status) {
             case Status.Inactive:
