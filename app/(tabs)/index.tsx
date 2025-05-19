@@ -1,5 +1,4 @@
-import { StyleSheet, ScrollView, View, Button } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StyleSheet, ScrollView, View } from 'react-native';
 import { useCallback, useState, useEffect } from 'react';
 import { useFocusEffect } from 'expo-router';
 

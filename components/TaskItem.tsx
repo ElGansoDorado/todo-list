@@ -1,13 +1,15 @@
 import { StyleSheet, View, Text, TouchableOpacity, Animated } from "react-native"
-import { Link } from "expo-router";
 import { useState, useRef } from "react";
-import { Task, Status } from "@/constants/Types"
-import Trash from '@/assets/svg/trash-2.svg'
-import X from '@/assets/svg/x-circle.svg'
-import Loader from '@/assets/svg/loader.svg'
-import Check from '@/assets/svg/check.svg'
-import Calendar from '@/assets/svg/calendar.svg'
-import Map from '@/assets/svg/map-pin.svg'
+import { Task, Status } from "@/constants/Types";
+
+import { router } from 'expo-router';
+
+import Trash from '@/assets/svg/trash-2.svg';
+import X from '@/assets/svg/x-circle.svg';
+import Loader from '@/assets/svg/loader.svg';
+import Check from '@/assets/svg/check.svg';
+import Calendar from '@/assets/svg/calendar.svg';
+import Map from '@/assets/svg/map-pin.svg';
 
 type Props = {
     task: Task,
@@ -53,6 +55,10 @@ export default function TaskItem({ task, remove, switchStatus }: Props) {
         }
     };
 
+    const followLink = () => {
+        router.push(`/task/${task.id}`);
+    }
+
     // выбираем один из вариантов цветов по id(для сохранения цвета при новой загрузки)
     const colorSelection = (): string => {
         switch (task.status) {
@@ -70,7 +76,7 @@ export default function TaskItem({ task, remove, switchStatus }: Props) {
     }
 
     return <View>
-        <Animated.View style={{ transform: [{ translateX: panelAnim } ]}}>
+        <Animated.View style={{ transform: [{ translateX: panelAnim }] }}>
             <View style={[styles.panel, { outlineColor: colorSelection() }]}>
                 <TouchableOpacity onPress={() => switchStatus(task.id, Status.Active)}>
                     <Text style={{ color: colorSelection() }}><Loader /></Text>
@@ -87,7 +93,12 @@ export default function TaskItem({ task, remove, switchStatus }: Props) {
             </View>
         </Animated.View>
         <Animated.View style={{ transform: [{ translateX: slideAnim }] }}>
-            <TouchableOpacity activeOpacity={1} style={[styles.container, { backgroundColor: colorSelection() }]} onPress={togglePanel}>
+            <TouchableOpacity 
+                activeOpacity={1} 
+                style={[styles.container, 
+                { backgroundColor: colorSelection() }]} 
+                onPress={togglePanel} 
+                onLongPress={followLink}>
                 <Text style={styles.title}>{task.title}</Text>
 
                 <Text style={styles.text}> {task.descriptionText} </Text>
@@ -140,6 +151,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     text: {
+        height: 65,
         fontWeight: '400',
         fontSize: 14,
         lineHeight: 14,
@@ -157,10 +169,11 @@ const styles = StyleSheet.create({
 
     panel: {
         width: 300,
-        paddingHorizontal: 20,
-        paddingVertical: 12,
+        height: 223,
+        paddingHorizontal: 30,
+        paddingVertical: 22,
         borderRadius: 20,
-        gap: 11,
+        justifyContent: 'space-between',
 
         backgroundColor: '#313131',
         alignItems: 'flex-end',
