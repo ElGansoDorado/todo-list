@@ -2,10 +2,10 @@ import { StyleSheet, ScrollView, View } from 'react-native';
 import { useCallback, useState, useEffect } from 'react';
 import { useFocusEffect } from 'expo-router';
 
-import { getList } from '@/constants/api';
-import { Task, Status } from '@/constants/Types';
+import { getList } from '@/api/api';
+import { Task, Status } from '@/types/task';
 import TaskItem from '@/components/TaskItem';
-import { deleteTask, saveList } from '@/constants/api';
+import { deleteTask, saveList } from '@/api/api';
 import { Recommended } from '@/components/Recommended';
 import { DateInput } from '@/components/ui/input/DateInput';
 

@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, TouchableOpacity, Animated } from "react-native"
 import { useState, useRef } from "react";
-import { Task, Status } from "@/constants/Types";
+import { Task, Status } from "@/types/task";
 
 import { router } from 'expo-router';
 

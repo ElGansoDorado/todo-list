@@ -2,8 +2,8 @@ import { useLocalSearchParams } from "expo-router/build/hooks";
 import { View, Text, StyleSheet } from "react-native";
 import { useCallback, useState } from 'react';
 import { useFocusEffect, Link } from 'expo-router';
-import { getTask } from "@/constants/api";
-import { Task } from "@/constants/Types";
+import { getTask } from "@/api/api";
+import { Task } from "@/types/task";
 
 import { FontAwesome } from '@expo/vector-icons';
 
